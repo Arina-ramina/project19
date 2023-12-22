@@ -1,0 +1,90 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "обувь",
+      "title": "красивая и удобная"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "овощи",
+      "title": "полезные и свежие"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "фрукты",
+      "title": ""
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+      "name": "крупы",
+      "title": ""
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "туфли",
+      "title": "на высоком каблуке",
+      "preview": "",
+      "category": 1,
+      "price_for_one": 5000,
+      "date_of_creation": "2023-12-20T20:37:38.241Z",
+      "date_last_modified": "2023-12-20T20:37:38.241Z",
+      "created_at": "2023-12-20T20:37:38.241Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "помидор",
+      "title": "краснодарский",
+      "preview": "",
+      "category": 2,
+      "price_for_one": 5,
+      "date_of_creation": "2023-12-20T20:38:02.055Z",
+      "date_last_modified": "2023-12-20T20:38:02.055Z",
+      "created_at": "2023-12-20T20:38:02.055Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "гречка",
+      "title": "всегда в дефиците",
+      "preview": "",
+      "category": 4,
+      "price_for_one": 45,
+      "date_of_creation": "2023-12-20T21:10:18.653Z",
+      "date_last_modified": "2023-12-20T21:10:18.653Z",
+      "created_at": "2023-12-20T21:10:18.653Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "name": "груша",
+      "title": "садовая",
+      "preview": "",
+      "category": 3,
+      "price_for_one": 5,
+      "date_of_creation": "2023-12-20T21:10:44.797Z",
+      "date_last_modified": "2023-12-20T21:10:44.797Z",
+      "created_at": "2023-12-20T21:10:44.797Z"
+    }
+  }
+]
