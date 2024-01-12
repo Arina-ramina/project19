@@ -9,3 +9,25 @@
     margin-left: 20px; /* Настройте отступ от левой стороны */
     /* Другие стили по необходимости */
 }
+
+.menu-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff; /* Цвет фона */
+    padding: 10px; /* Отступы вокруг элементов меню */
+    border-bottom: 1px solid #ccc; /* Граница снизу */
+}
+
+.menu-container h4 {
+    margin: 0; /* Убираем отступы у заголовка */
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    gap: 20px; /* Промежуток между пунктами меню */
+}
+
+.menu-items li {
+    margin: 0; /* Убираем отступы у элементов списка */

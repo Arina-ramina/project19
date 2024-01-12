@@ -1,4 +1,6 @@
-Django
+Django~=5.0
 psycopg2-binary
 pillow
 ipython
+pytils~=0.4.1
+python-dotenv

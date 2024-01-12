@@ -1,0 +1,16 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+
+{% block content%}
+<div class="blog-post text-center">
+    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary mx-auto" style="max-width: 100%;">
+        <div class="col-12">
+            <img class="img-fluid" src="{{ object.preview|mediapath }}" alt="">
+            <h2 class="display-3 link-body-emphasis mb-1">{{ object.name }} ({{ object.slug }})</h2>
+            <p class="blog-post-meta">{{ object.date_of_creation}}</p>
+            <p class="text-xl-end">{{ object.content }}</p>
+            <p class="text-xl-end">Просмотры: {{ object.views_count }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
