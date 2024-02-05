@@ -1,7 +1,8 @@
 from django.forms import inlineformset_factory
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.core.mail import send_mail
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
@@ -47,6 +48,11 @@ class ProductListView(ListView):
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'catalog/product.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product_versions'] = Version.objects.filter(product=self.object)
+        return context
 
 
 class ProductCreateView(CreateView):
@@ -152,3 +158,49 @@ class BlogUpdateView(UpdateView):
 class BlogDeleteView(DeleteView):
     model = Blog
     success_url = reverse_lazy('catalog:blog_list')
+
+# def add_version(request, pk):
+#     product = get_object_or_404(Product, pk=pk)
+#     if request.method == 'POST':
+#         form = VersionForm(request.POST)
+#         if form.is_valid():
+#             version = form.save(commit=False)
+#             version.product = product
+#             version.save()
+#             return redirect('catalog:product', pk=product.pk)
+#     else:
+#         form = VersionForm()
+#     return render(request, 'product_form.html', {'form': form})
+
+
+class AddVersionView(View):
+    template_name = 'add_version.html'
+    form_class = VersionForm
+
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        form = self.form_class()
+        return render(request, self.template_name, {'product': product, 'form': form})
+
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            version = form.save(commit=False)
+
+            # Проверяем, есть ли уже активная версия
+            active_versions = Version.objects.filter(product=product, is_current=True)
+            if active_versions.exists():
+                # Если есть, выдаем ошибку
+                error_message = "Может быть только одна активная версия. Пожалуйста, выберите только одну активную версию."
+                return render(request, self.template_name,
+                              {'product': product, 'form': form, 'error_message': error_message})
+
+            # Если активной версии нет, сохраняем новую версию
+            version.product = product
+            version.save()
+
+            return redirect('product_detail', pk=pk)
+
+        return render(request, self.template_name, {'product': product, 'form': form})

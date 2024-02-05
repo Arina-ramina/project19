@@ -41,13 +41,13 @@ class Version(models.Model):
     is_current = models.BooleanField(default=False, verbose_name='Признак текущей версии')
 
     def __str__(self):
-        return f"{self.product.name} - {self.version_name}"
+        return f"{self.product.name} - {self.name_version}"
 
     def save(self, *args, **kwargs):
         if self.is_current:
             # Установка текущей версии только для одной версии продукта
-            Version.objects.filter(product=self.product).update(is_current=False)
-        super(Version, self).save(*args, **kwargs)
+            Version.objects.filter(product=self.product).exclude(pk=self.pk).update(is_current=False)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Версия'

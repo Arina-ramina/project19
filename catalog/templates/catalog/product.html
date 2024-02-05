@@ -3,26 +3,26 @@
 {% load my_tags %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-<h1 class="fw-light">Подробнее о товаре</h1>
-<h1>{{ product.name }}</h1>
-<p class="lead text-body-secondary">Здесь Вы можете увидеть полное описание товара.</p>
+    <h1 class="fw-light">Подробнее о товаре</h1>
+    <h1>{{ product.name }}</h1>
+    <p class="lead text-body-secondary">Здесь Вы можете увидеть полное описание товара.</p>
 
     {% if product.preview %}
-<!-- Если изображение существует, показать его -->
+        <!-- Если изображение существует, показать его -->
         <img src="{{ product.preview|mediapath }}" class="product-image" alt="{{ product.name }}">
-
-        <div class="product-info">
-        <h1>{{ product.name }}</h1>
     {% else %}
-    <!-- Если изображение отсутствует, показать заглушку -->
-        <img src="{% static 'media/products/нет_фото.jpeg' %}" class="card-img-top img-fluid"
-             alt="Заглушка">
+        <!-- Если изображение отсутствует, показать заглушку -->
+        <img src="{% static 'media/products/нет_фото.jpeg' %}" class="card-img-top img-fluid" alt="Заглушка">
     {% endif %}
+
     <p class="card-text">{{ product.title|slice:":100" }}</p>
     <p class="card-text">{{ product.price_for_one }} рублей за 1 шт</p>
+
+    <!-- Добавленный код для отображения версий продукта -->
+    {% if product.active_version %}
+    <p class="card-text">Текущая версия: {{ product.active_version.name_version }} (№{{ product.active_version.No_version }})</p>
+    {% endif %}
+
     <div class="d-flex justify-content-between align-items-center">
     </div>
-
-    {% endblock %}
-
+{% endblock %}
