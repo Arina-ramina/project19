@@ -21,15 +21,37 @@ class Product(models.Model):
     price_for_one = models.IntegerField(verbose_name='Цена за штуку')
     date_of_creation = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     date_last_modified = models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения')
-    # created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-
 
     def __str__(self):
         return f'{self.name}'
 
+    @property
+    def active_version(self):
+        return self.version_set.filter(is_current=True).first()
+
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
+
+class Version(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    No_version = models.CharField(max_length=50, verbose_name='Номер версии', unique=True)
+    name_version = models.CharField(max_length=100, verbose_name='Название версии')
+    is_current = models.BooleanField(default=False, verbose_name='Признак текущей версии')
+
+    def __str__(self):
+        return f"{self.product.name} - {self.version_name}"
+
+    def save(self, *args, **kwargs):
+        if self.is_current:
+            # Установка текущей версии только для одной версии продукта
+            Version.objects.filter(product=self.product).update(is_current=False)
+        super(Version, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Версия'
+        verbose_name_plural = 'Версии'
 
 
 class Blog(models.Model):

@@ -2,34 +2,50 @@
 {% load my_tags %}
 
 {% block content %}
-<div class="col">
-    <a class="btn btn-outline-primary" href="{% url 'catalog:blog_create' %}">Добавьте статью</a>
-</div>
+
 <h1 class="fw-light">Наши статьи</h1>
 <p class="lead text-body-secondary">Здесь Вы можете увидеть все статьи и добавить свою</p>
 
-{% for object in object_list %}
 <div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-        <div class="col-lg-6 px-0">
-            <img class="card-img-top" src="{{ object.preview|mediapath }}" alt="">
-            <p class="display-4 fst-italic">{{ object.name }}</p>
-            <p class="lead my-3">{{ object.content|truncatewords:30 }}</p>
-            <div class="card-footer">
-                <small class="text-muted">Опубликовано: {{ object.date_of_creation }}</small>
-                <div class="btn-group">
-                    <a href="{% url 'catalog:blog_view' object.pk %}"
-                       class="btn btn-outline-secondary">Подробнее</a>
-                    <a href="{% url 'catalog:blog_edit' object.pk %}"
-                       class="btn btn-outline-secondary">Редактировать</a>
-                    <a href="{% url 'catalog:blog_delete' object.pk %}"
-                       class="btn btn-outline-secondary">Удалить</a>
+    <div class="row">
+        {% for object in object_list %}
+        <div class="col-12">
+            <!-- Код для отображения информации о статье -->
+            {% for product in object.product_set.all %}
+            {% if product.active_version %}
+            <p>Текущая версия: {{ product.active_version.name_version }}</p>
+            {% endif %}
+            {% endfor %}
+            <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+                <img class="card-img-top" src="{{ object.preview|mediapath }}" alt="">
+                <p class="display-4 text-center fst-italic">{{ object.name }}</p>
+                <p class="text-lg">{{ object.content|truncatewords:30 }}</p>
+                <div class="card-footer">
+                    <small class="text-muted">Опубликовано: {{ object.date_of_creation }}</small>
+                    {% for form in formset.forms %}
+                        {{ form.as_p }}
+                    {% endfor %}
+                    <div class="btn-group">
+                        {% if object.pk %}
+                            <a href="{% url 'catalog:blog_view_pk' object.pk %}"
+                               class="btn btn-outline-secondary">Подробнее</a>
+                        {% else %}
+                            <a href="{% url 'catalog:blog_view_slug' object.slug %}"
+                               class="btn btn-outline-secondary">Подробнее</a>
+                        {% endif %}
+                        <a href="{% url 'catalog:blog_edit' object.pk %}"
+                           class="btn btn-outline-secondary">Редактировать</a>
+                        <a href="{% url 'catalog:blog_delete' object.pk %}"
+                           class="btn btn-outline-secondary">Удалить</a>
+                    </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
+    </div>
+    <div class="btn-group float-end mx-2">
+        <a class="btn btn-info btn-lg" href="{% url 'catalog:blog_create' %}">Добавьте свою статью</a>
     </div>
 </div>
-
-{% endfor %}
 
 {% endblock %}
