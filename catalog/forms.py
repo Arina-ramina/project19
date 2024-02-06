@@ -33,11 +33,6 @@ class VersionForm(forms.ModelForm):
     class Meta:
         model = Version
         fields = '__all__'
-        labels = {
-            'номер': 'Номер версии',
-            'название': 'Название версии',
-            'текущая_версия': 'Является ли текущей версией',
-        }
 
 
 

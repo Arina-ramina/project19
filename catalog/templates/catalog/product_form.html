@@ -1,54 +1,59 @@
 {% extends 'catalog/base.html' %}
 
 {% block content %}
-  <form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <div class="col-12">
-      <div class="card mb-4 box-shadow">
-        <div class="card-header">
-          <h4 class="my-0 font-weight-normal">Добавьте свой товар</h4>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Редактировать товар "{{ product.name }}"</h4>
+            </div>
+            <div class="card-body">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Сохранить</button>
+            </div>
         </div>
-        <div class="card-body">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit" class="btn btn-success">Сохранить</button>
-        </div>
-      </div>
     </div>
-  </form>
+</form>
 
-  <div class="col-12">
+{% if error_message %}
+<p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
+<!-- Форма для добавления новой версии продукта -->
+<div class="col-12">
     <div class="card mb-4 box-shadow">
-      <div class="card-header">
-        <h2>Добавить версию продукта "{{ product.name }}"</h2>
-      </div>
-      <div class="card-body">
-        {% if error_message %}
-          <p style="color: red;">{{ error_message }}</p>
-        {% endif %}
-        <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit">Сохранить</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  {% if product_versions %}
-    <div class="col-12">
-      <div class="card mb-4 box-shadow">
         <div class="card-header">
-          <h4 class="my-0 font-weight-normal">Версии товара</h4>
+            <h2>Добавить версию продукта "{{ product.name }}"</h2>
         </div>
         <div class="card-body">
-          <ul>
-            {% for version in product_versions %}
-              <li>{{ version.name }}</li>
-            {% endfor %}
-          </ul>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ formset.as_p }} <!-- Используем формсет для редактирования версии продукта -->
+                <button type="submit">Добавить версию</button>
+            </form>
         </div>
-      </div>
     </div>
-  {% endif %}
+</div>
+
+{% if product_versions %}
+<div class="col-12">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Версии товара</h4>
+        </div>
+        <div class="card-body">
+            <ul>
+                {% for version in product_versions %}
+                <li>Номер версии: {{ version.No_version }}</li>
+                <li>Название версии: {{ version.name_version }}</li>
+                <li>Является ли текущей версией: {{ version.is_current }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
+
 

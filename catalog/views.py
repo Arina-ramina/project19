@@ -68,8 +68,14 @@ class ProductUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+
+        # Получаем активные версии продукта
         active_versions = Version.objects.filter(product=self.object, is_current=True)
 
+        # Передаем активные версии в контекст представления
+        context_data['active_versions'] = active_versions
+
+        # Создаем формсет версий продукта
         VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
         if self.request.method == 'POST':
             context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
@@ -77,6 +83,15 @@ class ProductUpdateView(UpdateView):
             context_data['formset'] = VersionFormset(instance=self.object)
 
         return context_data
+
+    def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+
+        return super().form_valid(form)
 
 
     def form_valid(self, form):
@@ -174,33 +189,32 @@ class BlogDeleteView(DeleteView):
 
 
 class AddVersionView(View):
-    template_name = 'add_version.html'
+    model = Version
+    template_name = 'catalog/product_form.html'  # Используем тот же шаблон, что и для редактирования продукта
     form_class = VersionForm
 
-    def get(self, request, pk):
-        product = get_object_or_404(Product, pk=pk)
-        form = self.form_class()
-        return render(request, self.template_name, {'product': product, 'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
+        context['product'] = product
+        context['product_form'] = ProductForm(instance=product)
+        return context
 
-    def post(self, request, pk):
-        product = get_object_or_404(Product, pk=pk)
-        form = self.form_class(request.POST)
+    def form_valid(self, form):
+        product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
+        product_form = ProductForm(instance=product)
+        self.object = form.save(commit=False)
 
-        if form.is_valid():
-            version = form.save(commit=False)
+        # Проверяем, есть ли уже активная версия
+        active_versions = Version.objects.filter(product=product, is_current=True)
+        if active_versions.exists():
+            # Если есть, выдаем ошибку
+            error_message = "Может быть только одна активная версия. Пожалуйста, выберите только одну активную версию."
+            return self.render_to_response(self.get_context_data(product=product, product_form=product_form, form=form,
+                                                                 error_message=error_message))
 
-            # Проверяем, есть ли уже активная версия
-            active_versions = Version.objects.filter(product=product, is_current=True)
-            if active_versions.exists():
-                # Если есть, выдаем ошибку
-                error_message = "Может быть только одна активная версия. Пожалуйста, выберите только одну активную версию."
-                return render(request, self.template_name,
-                              {'product': product, 'form': form, 'error_message': error_message})
+        # Если активной версии нет, сохраняем новую версию
+        self.object.product = product
+        self.object.save()
 
-            # Если активной версии нет, сохраняем новую версию
-            version.product = product
-            version.save()
-
-            return redirect('product_detail', pk=pk)
-
-        return render(request, self.template_name, {'product': product, 'form': form})
+        return redirect('product_detail', pk=product.pk)
