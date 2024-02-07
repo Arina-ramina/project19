@@ -9,7 +9,7 @@
 
     {% if product.preview %}
         <!-- Если изображение существует, показать его -->
-        <img src="{{ product.preview|mediapath }}" class="product-image" alt="{{ product.name }}">
+        <img src="{{ product.preview|mediapath }}" class="product-image" alt="{{ product.name }} width="400" height="400">
     {% else %}
         <!-- Если изображение отсутствует, показать заглушку -->
         <img src="{% static 'media/products/нет_фото.jpeg' %}" class="card-img-top img-fluid" alt="Заглушка">

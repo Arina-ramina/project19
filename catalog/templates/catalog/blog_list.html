@@ -1,5 +1,5 @@
 {% extends 'catalog/base.html' %}
-{% load my_tags %}
+{% load my_tags crispy_forms_tags%}
 
 {% block content %}
 
@@ -23,7 +23,7 @@
                 <div class="card-footer">
                     <small class="text-muted">Опубликовано: {{ object.date_of_creation }}</small>
                     {% for form in formset.forms %}
-                        {{ form.as_p }}
+                        {{ form|crispy }}
                     {% endfor %}
                     <div class="btn-group">
                         {% if object.pk %}

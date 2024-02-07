@@ -94,16 +94,6 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-    def form_valid(self, form):
-        formset = self.get_context_data()['formset']
-        self.object = form.save()
-        if formset.is_valid():
-            formset.instance = self.object
-            formset.save()
-
-        return super().form_valid(form)
-
-
 class BlogCreateView(CreateView):
     model = Blog
     fields = ('name', 'content', 'preview',)
@@ -198,23 +188,11 @@ class AddVersionView(View):
         product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
         context['product'] = product
         context['product_form'] = ProductForm(instance=product)
+
+        # Предзаполнение формы версии данными о продукте
+        initial_data = {
+            'product': product,
+            'No_version': product.versions.count() + 1,
+        }
+        context['version_form'] = VersionForm(initial=initial_data)
         return context
-
-    def form_valid(self, form):
-        product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
-        product_form = ProductForm(instance=product)
-        self.object = form.save(commit=False)
-
-        # Проверяем, есть ли уже активная версия
-        active_versions = Version.objects.filter(product=product, is_current=True)
-        if active_versions.exists():
-            # Если есть, выдаем ошибку
-            error_message = "Может быть только одна активная версия. Пожалуйста, выберите только одну активную версию."
-            return self.render_to_response(self.get_context_data(product=product, product_form=product_form, form=form,
-                                                                 error_message=error_message))
-
-        # Если активной версии нет, сохраняем новую версию
-        self.object.product = product
-        self.object.save()
-
-        return redirect('product_detail', pk=product.pk)

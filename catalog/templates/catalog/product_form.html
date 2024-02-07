@@ -1,4 +1,5 @@
 {% extends 'catalog/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <form method="post" enctype="multipart/form-data">
@@ -9,7 +10,7 @@
             </div>
             <div class="card-body">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {{ form|crispy }}
                 <button type="submit" class="btn btn-success">Сохранить</button>
             </div>
         </div>
@@ -29,7 +30,7 @@
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ formset.as_p }} <!-- Используем формсет для редактирования версии продукта -->
+                {{ formset|crispy }}
                 <button type="submit">Добавить версию</button>
             </form>
         </div>
@@ -55,5 +56,6 @@
 </div>
 {% endif %}
 {% endblock %}
+
 
 
