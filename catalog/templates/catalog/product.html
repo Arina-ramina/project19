@@ -18,7 +18,7 @@
     <p class="card-text">{{ product.title|slice:":100" }}</p>
     <p class="card-text">{{ product.price_for_one }} рублей за 1 шт</p>
     <p class="card-text">Владелец: {{ product.owner|default:"Без владельца" }} </p>
-
+    <p class="card-text">Опубликовано: {{ product.is_published }} </p>
     <!-- Добавленный код для отображения версий продукта -->
     {% if product.active_version %}
     <p class="card-text">Текущая версия: {{ product.active_version.name_version }} (№{{ product.active_version.No_version }})</p>

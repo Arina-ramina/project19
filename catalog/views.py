@@ -34,7 +34,7 @@ def contacts(request):
 #     context = {'object_list': products_list}
 #     return render(request, 'catalog/home.html', context)
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'catalog/home.html'
 
@@ -47,7 +47,7 @@ class ProductListView(ListView):
 #     }
 #     return render(request, 'catalog/product.html', context)
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'catalog/product.html'
 
