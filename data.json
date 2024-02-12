@@ -1,1 +1,145 @@
-[{"model": "catalog.category", "pk": 13, "fields": {"name": "обувь", "title": "красивая и удобная"}}, {"model": "catalog.category", "pk": 14, "fields": {"name": "овощи", "title": "полезные и свежие"}}, {"model": "catalog.category", "pk": 15, "fields": {"name": "фрукты", "title": ""}}, {"model": "catalog.category", "pk": 16, "fields": {"name": "крупы", "title": ""}}, {"model": "catalog.product", "pk": 13, "fields": {"name": "туфли", "title": "на высоком каблуке", "preview": "products/туфли_gYymslO.jpeg", "category": 13, "price_for_one": 5000, "date_of_creation": "2023-12-23T09:02:46.010Z", "date_last_modified": "2024-02-05T11:03:27.160Z"}}, {"model": "catalog.product", "pk": 14, "fields": {"name": "помидор", "title": "краснодарский", "preview": "products/помидор_Ik0iSrx.jpeg", "category": 14, "price_for_one": 5, "date_of_creation": "2023-12-23T09:02:46.010Z", "date_last_modified": "2024-02-05T11:03:41.428Z"}}, {"model": "catalog.product", "pk": 15, "fields": {"name": "гречка", "title": "всегда в дефиците", "preview": "products/гречка_jiMAcId.jpeg", "category": 16, "price_for_one": 45, "date_of_creation": "2023-12-23T09:02:46.010Z", "date_last_modified": "2024-01-13T00:57:37.943Z"}}, {"model": "catalog.product", "pk": 16, "fields": {"name": "груша", "title": "садовая", "preview": "products/груша_bsaXvs6.jpeg", "category": 15, "price_for_one": 5, "date_of_creation": "2023-12-23T09:02:46.010Z", "date_last_modified": "2024-02-05T11:34:56.963Z"}}, {"model": "catalog.product", "pk": 21, "fields": {"name": "клубника", "title": "садовая", "preview": "products/клубника_hvYikTl.jpeg", "category": 15, "price_for_one": 8, "date_of_creation": "2024-01-12T22:40:02.899Z", "date_last_modified": "2024-02-05T11:03:16.883Z"}}, {"model": "catalog.version", "pk": 1, "fields": {"product": 16, "No_version": "1", "name_version": "первая", "is_current": true}}, {"model": "catalog.version", "pk": 2, "fields": {"product": 13, "No_version": "2", "name_version": "вторая", "is_current": true}}, {"model": "catalog.blog", "pk": 5, "fields": {"name": "Полезные свойства помидоров", "slug": "poleznyie-svojstva-pomidorov", "content": "Помидоры подходят для низкокалорийного рациона. В 100 г помидоров всего 18 ккал, из них 0,88 г белков, 0,2 г жиров и 2,69 г углеводов.\r\n\r\nВ томатах содержится клетчатка, полезная для пищеварения, а также калий и магний, необходимые для здоровья сердечно-сосудистой системы.", "preview": "blog/504346_1200x600x70_c_l87gTIP.jpeg", "date_of_creation": "2024-01-09T23:13:32.933Z", "is_published": true, "views_count": 970}}, {"model": "catalog.blog", "pk": 8, "fields": {"name": "Польза груши", "slug": "polza-grushi", "content": "В груше есть много полезных веществ, которые насыщают организм необходимыми витаминами и микроэлементами. Также она помогает пищеварению, здоровью сердечно-сосудистой системы и снижает риск развития диабета.\r\n\r\nГруша содержит полезные витамины и минералы: витамины С и К, калий, кальций железо, магний, рибофлавин, витамин В6, фолиевую кислоту. В плодах с красной кожурой также есть каротиноиды, флавоноиды и антоцианы, которые действуют как антиоксиданты.", "preview": "blog/grusha_polza_i_vred_oblogka_960-960x540_iARaawS.jpeg", "date_of_creation": "2024-01-11T12:28:15.898Z", "is_published": true, "views_count": 724}}]
+[
+  {
+    "model": "catalog.category",
+    "pk": 13,
+    "fields": {
+      "name": "обувь",
+      "title": "красивая и удобная"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 14,
+    "fields": {
+      "name": "овощи",
+      "title": "полезные и свежие"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 15,
+    "fields": {
+      "name": "фрукты",
+      "title": ""
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 16,
+    "fields": {
+      "name": "крупы",
+      "title": ""
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 13,
+    "fields": {
+      "name": "туфли",
+      "title": "на высоком каблуке",
+      "preview": "products/туфли_gYymslO.jpeg",
+      "category": 13,
+      "price_for_one": 5000,
+      "date_of_creation": "2023-12-23T09:02:46.010Z",
+      "date_last_modified": "2024-02-05T11:03:27.160Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 14,
+    "fields": {
+      "name": "помидор",
+      "title": "краснодарский",
+      "preview": "products/помидор_Ik0iSrx.jpeg",
+      "category": 14,
+      "price_for_one": 5,
+      "date_of_creation": "2023-12-23T09:02:46.010Z",
+      "date_last_modified": "2024-02-05T11:03:41.428Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 15,
+    "fields": {
+      "name": "гречка",
+      "title": "всегда в дефиците",
+      "preview": "products/гречка_jiMAcId.jpeg",
+      "category": 16,
+      "price_for_one": 45,
+      "date_of_creation": "2023-12-23T09:02:46.010Z",
+      "date_last_modified": "2024-01-13T00:57:37.943Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 16,
+    "fields": {
+      "name": "груша",
+      "title": "садовая",
+      "preview": "products/груша_bsaXvs6.jpeg",
+      "category": 15,
+      "price_for_one": 5,
+      "date_of_creation": "2023-12-23T09:02:46.010Z",
+      "date_last_modified": "2024-02-05T11:34:56.963Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 21,
+    "fields": {
+      "name": "клубника",
+      "title": "садовая",
+      "preview": "products/клубника_hvYikTl.jpeg",
+      "category": 15,
+      "price_for_one": 8,
+      "date_of_creation": "2024-01-12T22:40:02.899Z",
+      "date_last_modified": "2024-02-05T11:03:16.883Z"
+    }
+  },
+  {
+    "model": "catalog.version",
+    "pk": 1,
+    "fields": {
+      "product": 16,
+      "No_version": "1",
+      "name_version": "первая",
+      "is_current": true
+    }
+  },
+  {
+    "model": "catalog.version",
+    "pk": 2,
+    "fields": {
+      "product": 13,
+      "No_version": "2",
+      "name_version": "вторая",
+      "is_current": true
+    }
+  },
+  {
+    "model": "catalog.blog",
+    "pk": 5,
+    "fields": {
+      "name": "Полезные свойства помидоров",
+      "slug": "poleznyie-svojstva-pomidorov",
+      "content": "Помидоры подходят для низкокалорийного рациона. В 100 г помидоров всего 18 ккал, из них 0,88 г белков, 0,2 г жиров и 2,69 г углеводов.\r\n\r\nВ томатах содержится клетчатка, полезная для пищеварения, а также калий и магний, необходимые для здоровья сердечно-сосудистой системы.",
+      "preview": "blog/504346_1200x600x70_c_l87gTIP.jpeg",
+      "date_of_creation": "2024-01-09T23:13:32.933Z",
+      "is_published": true,
+      "views_count": 970
+    }
+  },
+  {
+    "model": "catalog.blog",
+    "pk": 8,
+    "fields": {
+      "name": "Польза груши",
+      "slug": "polza-grushi",
+      "content": "В груше есть много полезных веществ, которые насыщают организм необходимыми витаминами и микроэлементами. Также она помогает пищеварению, здоровью сердечно-сосудистой системы и снижает риск развития диабета.\r\n\r\nГруша содержит полезные витамины и минералы: витамины С и К, калий, кальций железо, магний, рибофлавин, витамин В6, фолиевую кислоту. В плодах с красной кожурой также есть каротиноиды, флавоноиды и антоцианы, которые действуют как антиоксиданты.",
+      "preview": "blog/grusha_polza_i_vred_oblogka_960-960x540_iARaawS.jpeg",
+      "date_of_creation": "2024-01-11T12:28:15.898Z",
+      "is_published": true,
+      "views_count": 724
+    }
+  }
+]

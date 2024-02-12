@@ -19,8 +19,10 @@
                             <div class="btn-group">
                                 <a href="{% url 'catalog:product' object.pk %}"
                                    class="btn btn-sm btn-outline-secondary">Подробнее</a>
+                                {% if perms.catalog.change_product %}
                                 <a href="{% url 'catalog:product_update' object.pk%}"
                                    class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -31,7 +33,9 @@
     </div>
 </div>
 <div class="btn-group float-end mx-2">
+    {% if perms.catalog.add_product %}
     <a class="btn btn-info btn-lg" href="{% url 'catalog:product_create' %}">Добавьте товар</a>
+    {% endif %}
 </div>
 
 {% endblock %}

@@ -1,9 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.core.mail import send_mail
-from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
@@ -11,13 +11,6 @@ from pytils.translit import slugify
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Blog, Version
 from config import settings
-
-
-# def category(request, pk):
-#    category_item = Category.objects.get(pk=pk)
-#    context = {'object_list': Product.objects.filter(category_id=pk),
-#               'title': f'Наши товары по категориям {category_item.name}'}
-#    return render(request, 'catalog/products.html', context)
 
 
 def contacts(request):
@@ -29,23 +22,10 @@ def contacts(request):
     return render(request, 'catalog/contacts.html')
 
 
-# def home(request):
-#     products_list = Product.objects.all()[:100]
-#     context = {'object_list': products_list}
-#     return render(request, 'catalog/home.html', context)
-
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'catalog/home.html'
 
-
-# def product(request, pk):
-#     product_item = get_object_or_404(Product, pk=pk)
-#     context = {
-#         'product': product_item,
-#         'title': f'Товар: {product_item.name}'
-#     }
-#     return render(request, 'catalog/product.html', context)
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
@@ -57,16 +37,11 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ProductCreateView(LoginRequiredMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
+    permission_required = 'catalog.add_product'
     success_url = reverse_lazy('catalog:home')
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Чтобы добавить продукт, сначала войдите в систему.')
-            return redirect('users:login')  # Перенаправление на страницу входа
-        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.object = form.save()
@@ -76,16 +51,18 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     fields = ('name', 'title', 'price_for_one', 'preview')
+    permission_required = 'catalog.change_product'
     success_url = reverse_lazy('catalog:home')
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Чтобы добавить продукт, сначала войдите в систему.')
-            return redirect('users:login')  # Перенаправление на страницу входа
-        return super().dispatch(request, *args, **kwargs)
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.owner != self.request.user and self.request.user.is_staff:
+            raise Http404
+
+        return self.object
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -97,11 +74,11 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         context_data['active_versions'] = active_versions
 
         # Создаем формсет версий продукта
-        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        version_formset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
         if self.request.method == 'POST':
-            context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
+            context_data['formset'] = version_formset(self.request.POST, instance=self.object)
         else:
-            context_data['formset'] = VersionFormset(instance=self.object)
+            context_data['formset'] = version_formset(instance=self.object)
 
         return context_data
 
