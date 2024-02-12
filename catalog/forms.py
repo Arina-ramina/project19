@@ -7,7 +7,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ['owner']
 
     def clean_name(self):
         name = self.cleaned_data['name']
@@ -33,6 +33,3 @@ class VersionForm(forms.ModelForm):
     class Meta:
         model = Version
         fields = '__all__'
-
-
-

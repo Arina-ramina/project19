@@ -19,7 +19,6 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'title')
 
 
-
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):
     list_display = ('product', 'No_version', 'name_version', 'is_current')

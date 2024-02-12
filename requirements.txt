@@ -1,8 +1,8 @@
-Django~=5.0
+Django==4.2
 psycopg2-binary
 pillow
 ipython
 pytils~=0.4.1
 python-dotenv
 django-crispy-forms
-crispy-bootstrap4
+crispy-bootstrap4pip uninstall django
