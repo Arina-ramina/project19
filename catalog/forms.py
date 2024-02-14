@@ -19,7 +19,7 @@ class ProductForm(forms.ModelForm):
         return name
 
     def clean_description(self):
-        description = self.cleaned_data['description']
+        description = self.cleaned_data['title']
         forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
                            'радар']
         for word in forbidden_words:
@@ -33,3 +33,9 @@ class VersionForm(forms.ModelForm):
     class Meta:
         model = Version
         fields = '__all__'
+
+
+class MProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('is_published', 'title', 'category')

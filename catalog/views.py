@@ -8,9 +8,10 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, MProductForm
 from catalog.models import Product, Blog, Version
 from config import settings
+from catalog.services import cache_category
 
 
 def contacts(request):
@@ -26,6 +27,10 @@ class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'catalog/home.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
@@ -33,7 +38,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['product_versions'] = Version.objects.filter(product=self.object)
+        context['product_versions'] = Version.objects.filter(product=self.kwargs['pk'])
         return context
 
 
@@ -50,6 +55,9 @@ class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
 
         return super().form_valid(form)
 
+    def get_queryset(self):
+        return cache_category()
+
 
 class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
@@ -59,27 +67,19 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.owner != self.request.user and self.request.user.is_staff:
+        if (self.request.user != self.object.user and not self.request.user.is_staff
+                and not self.request.user.is_superuser and self.request.user.has_perm('catalog.product_published')):
             raise Http404
 
         return self.object
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-
-        # Получаем активные версии продукта
-        active_versions = Version.objects.filter(product=self.object, is_current=True)
-
-        # Передаем активные версии в контекст представления
-        context_data['active_versions'] = active_versions
-
-        # Создаем формсет версий продукта
-        version_formset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
         if self.request.method == 'POST':
-            context_data['formset'] = version_formset(self.request.POST, instance=self.object)
+            context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
         else:
-            context_data['formset'] = version_formset(instance=self.object)
-
+            context_data['formset'] = VersionFormset(instance=self.object)
         return context_data
 
     def form_valid(self, form):
@@ -91,6 +91,11 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
             formset.save()
 
         return super().form_valid(form)
+
+    def get_form_class(self):
+        if self.request.user.has_perm('catalog.product_published'):
+            return MProductForm
+        return ProductForm
 
 
 class BlogCreateView(CreateView):
