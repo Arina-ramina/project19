@@ -1,0 +1,43 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="1">
+            <item index="0" class="java.lang.String" itemvalue="text-dark" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PyArgumentListInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="10">
+            <item index="0" class="java.lang.String" itemvalue="clyent" />
+            <item index="1" class="java.lang.String" itemvalue="navigator-updater" />
+            <item index="2" class="java.lang.String" itemvalue="anaconda-client" />
+            <item index="3" class="java.lang.String" itemvalue="conda-repo-cli" />
+            <item index="4" class="java.lang.String" itemvalue="TBB" />
+            <item index="5" class="java.lang.String" itemvalue="conda-verify" />
+            <item index="6" class="java.lang.String" itemvalue="conda" />
+            <item index="7" class="java.lang.String" itemvalue="conda-build" />
+            <item index="8" class="java.lang.String" itemvalue="anaconda-navigator" />
+            <item index="9" class="java.lang.String" itemvalue="datashape" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="catalog.models.Product.version_set" />
+          <option value="catalog.models.Version.objects" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="Pylint" enabled="true" level="ERROR" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+  </profile>
+</component>

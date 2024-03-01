@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap4",
     "users",
+    "mailing"
 ]
 
 MIDDLEWARE = [
@@ -156,6 +157,15 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/'
+
+# cron вызывающая задачу time_task
+CRONJOBS = [
+    ('* * * * *', 'mailing.services.time_task'),  # Ежеминутная рассылка
+    ('0 10 * * *', 'mailing.services.time_task', ['daily']),  # Ежедневная рассылка
+    ('0 10 * * 1', 'mailing.services.time_task', ['weekly']),  # Еженедельная рассылка
+    ('0 10 1 * *', 'mailing.services.time_task', ['monthly']),  # Ежемесячная рассылка
+]
+
 
 CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 1
 
