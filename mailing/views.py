@@ -1,14 +1,31 @@
+import random
+
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView, TemplateView
 
 from catalog.models import Blog
 from mailing.forms import MailingForm, ClientForm
 from mailing.models import Client, Mailing, Logs
-from mailing.services import time_task
+from mailing.services import time_task, get_cache_for_mailings
+
+
+# class IndexView(TemplateView):
+#     template_name = 'mailing/index.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = 'Главная'
+#         context['mail_count'] = len(Mailing.objects.all())
+#         context['active_mail_count'] = Mailing.objects.filter(is_active=True).count()
+#         context['client_count'] = Client.objects.count()
+#         # context['object_list'] = Blog.objects.all()[:3]
+#         context['object_list'] = random.sample(list(Blog.objects.all()), min(3, Blog.objects.count()))
+#
+#         return context
 
 
 class ChecksUser:
@@ -130,27 +147,33 @@ class HomePageView(TemplateView):
     template_name = 'mailing/home.html'
 
     def get_context_data(self, **kwargs):
-        blog = Blog.objects.all()[:3]  # выборка из базы данных 3 случайных записи Blog
-        clients_count = len(Client.objects.all())  # подсчёт кол-во клиентов
+        blog = random.sample(list(Blog.objects.all()), min(3, Blog.objects.count()))  # выборка из базы данных 3 случайных записи Blog
+        clients_count = Client.objects.count()  # подсчёт кол-во клиентов
         mailing_count = len(Mailing.objects.all())  # подсчёт кол-во рассылок
-        mailing_active = len(Mailing.objects.filter(status='started'))  # подсчёт кол-во активных рассылок
-        context = super().get_context_data()
+        mailing_active = Mailing.objects.filter(is_active=True).count()  # подсчёт кол-во активных рассылок
+        context = super().get_context_data(**kwargs)
         context['mailing_count'] = mailing_count
         context['mailing_active'] = mailing_active
         context['clients_count'] = clients_count
-        context['blogs'] = blog
+        context['blog'] = blog
 
         return context
-
 
 @permission_required('mailing.deactivate_mailing')
 def off(request, pk):
     """Контролер для отключения рассылок"""
+    mail_item = get_object_or_404(Mailing, pk=pk)
+    if mail_item.is_active:
+        mail_item.is_active = False
+    else:
+        mail_item.is_active = True
+    mail_item.save()
+    return redirect('mailing:mailing_list')
 
-    obj = Mailing.objects.get(pk=pk)
-
-    if obj.status == 'created' or 'started':
-        obj.status = 'done'
-        obj.save()
-
-    return redirect(reverse(request, 'mailing:mailing_list'))
+    # obj = Mailing.objects.get(pk=pk)
+    #
+    # if obj.status == 'created' or 'started':
+    #     obj.status = 'done'
+    #     obj.save()
+    #
+    # return redirect(reverse(request, 'mailing:mailing_list'))

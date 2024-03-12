@@ -6,6 +6,7 @@
         <li><a href="{% url 'catalog:blog_list' %}" class="text-dark">Статьи</a></li>
         {% if user.is_authenticated %}
             <li><a href="{% url 'users:profile' %}" class="text-dark">Профиль</a></li>
+            <li><a href="{% url 'mailing:mailing_list' %}" class="text-dark">Рассылки</a></li>
             <li><a href="{% url 'users:logout' %}" class="text-dark">Выйти</a></li>
         {% else %}
             <li><a href="{% url 'users:login' %}" class="text-dark">Войти</a></li>

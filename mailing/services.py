@@ -9,6 +9,18 @@ from config.settings import CACHE_ENABLED
 from mailing.models import Mailing, Logs
 
 
+def get_cache_for_mailings():
+    if settings.CACHE_ENABLED:
+        key = 'mailings_count'
+        mailings_count = cache.get(key)
+        if mailings_count is None:
+            mailings_count = Mailing.objects.all().count()
+            cache.set(key, mailings_count)
+    else:
+        mailings_count = Mailing.objects.all().count()
+    return mailings_count
+
+
 def send_order_email(obj: Mailing):
     try:
         send_mail(

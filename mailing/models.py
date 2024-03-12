@@ -37,6 +37,7 @@ class Mailing(models.Model):
     end_time = models.DateField(**NULLABLE, verbose_name='конец рассылки')
     period = models.CharField(max_length=20, choices=PERIOD_CHOICES, **NULLABLE, verbose_name='периодичность')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, verbose_name='статус рассылки')
+    is_active = models.BooleanField(default=True, verbose_name='Активация рассылки')
     client = models.ManyToManyField(Client, verbose_name='клиент')
     title_message = models.CharField(max_length=100, verbose_name='тема письма')
     body_message = models.TextField(verbose_name='тело письма', **NULLABLE)

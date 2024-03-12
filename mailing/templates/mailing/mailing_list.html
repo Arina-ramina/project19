@@ -13,15 +13,29 @@
                 <li>----------------------------</li>
                 <li>Периодичность: {{object.period}}</li>
               </ul>
-              {% if user.is_authenticated %}
-                <button type="button" class="w-100 btn btn-sm btn-outline-success">Запустить рассылку</button>
-                <a href="{% url 'mailing:off' object.pk%}" class="w-100 btn btn-sm btn-outline-warning">Остановить рассылку</a>
-                <a href="{% url 'mailing:mailing_detail' object.pk%}" class="w-100 btn btn-sm btn-outline-info">Просмотр рассылки</a>
-                <a href="{% url 'mailing:mailing_update' object.pk%}" class="w-100 btn btn-sm btn-outline-primary">Редактировать рассылку</a>
-                <a href="{% url 'mailing:mailing_confirm_delete' object.pk%}" class="w-100 btn btn-sm btn-outline-danger">Удалить рассылку</a>
-              {% else %}
-                <a href="{% url 'mailing:mailing_detail' object.pk%}" class="w-100 btn btn-sm btn-outline-info">Просмотр рассылки</a>
-              {% endif %}
+                  {% if perms.mails.set_is_active %}
+            {% if object.is_active %}
+            <td><a href="{% url 'mailing:off' object.pk %}" class="btn btn-warning">Деактивировать</a></td>
+            {% else %}
+            <td><a href="{% url 'mailing:off' object.pk %}" class="btn btn-success">Активировать</a></td>
+            {% endif %}
+        {% endif %}
+
+
+        <td><a href="{% url 'mailing:mailing_detail' object.pk%}" class="btn btn-primary">Просмотр</a></td>
+        {% if not perms.mails.set_is_active %}
+        <td><a href="{% url 'mailing:mailing_update' object.pk%}" class="btn btn-primary">Редактировать</a></td>
+        <td><a href="{% url 'mailing:mailing_confirm_delete' object.pk%}" class="btn btn-primary">delete</a></td>
+        {% endif %}
+<!--              {% if user.is_authenticated %}-->
+<!--                <a href="{% url 'mailing:off' object.pk %}" class="w-100 btn btn-sm btn-outline-success">Запустить рассылку</a>-->
+<!--                <a href="{% url 'mailing:off' object.pk%}" class="w-100 btn btn-sm btn-outline-warning">Остановить рассылку</a>-->
+<!--                <a href="{% url 'mailing:mailing_detail' object.pk%}" class="w-100 btn btn-sm btn-outline-info">Просмотр рассылки</a>-->
+<!--                <a href="{% url 'mailing:mailing_update' object.pk%}" class="w-100 btn btn-sm btn-outline-primary">Редактировать рассылку</a>-->
+<!--                <a href="{% url 'mailing:mailing_confirm_delete' object.pk%}" class="w-100 btn btn-sm btn-outline-danger">Удалить рассылку</a>-->
+<!--              {% else %}-->
+<!--                <a href="{% url 'mailing:mailing_detail' object.pk%}" class="w-100 btn btn-sm btn-outline-info">Просмотр рассылки</a>-->
+<!--              {% endif %}-->
             </div>
           </div>
         </div>
